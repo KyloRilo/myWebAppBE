@@ -8,12 +8,12 @@ jobs:
       - restore_cache: # special step to restore the dependency cache
           key: dependency-cache-{{checksum "package.json"}}
       - run:
-        name: Setup Dependencies
-        command: npm install
+          name: Setup Dependencies
+          command: npm install
       - save_cache:
-        key: dependency-cache-{{checksum "package.json"}}
-        paths:
-          - ./node_modules
+          key: dependency-cache-{{checksum "package.json"}}
+          paths:
+            - ./node_modules
   push-image:
     machine: true
     steps:
