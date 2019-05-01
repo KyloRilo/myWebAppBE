@@ -8,6 +8,7 @@ copy . .
 RUN npm config set python /usr/bin/python
 WORKDIR /app/sec_backend
 RUN npm install
+WORKDIR /app
 
 
 CMD ["node", "/app/index.js"]
