@@ -1,0 +1,12 @@
+{
+    "name": "Software_Security_Application",
+    "version": "1.0.0",
+    "dependencies": {
+        "bcrypt": "^3.0.6",
+        "body-parser": "^1.19.0",
+        "dotenv": "^7.0.0",
+        "express": "^4.16.4",
+        "knex": "^0.16.5",
+        "mssql": "^5.1.0"
+    }
+}
