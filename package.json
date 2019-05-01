@@ -21,8 +21,6 @@
     "dependencies": {
         "@material-ui/core": "^3.9.2",
         "@material-ui/icons": "^3.0.2",
-        "react": "^16.8.4",
-        "gatsby": "^2.1.32",
-        "gatsby-cli": "^2.4.15"
+        "react": "^16.8.4"
     }
 }
