@@ -6,6 +6,8 @@ RUN apk add --virtual builds-deps build-base python
 
 copy . .
 RUN npm config set python /usr/bin/python
+WORKDIR /app/sec_backend
 RUN npm install
+
 
 CMD ["node", "/app/index.js"]
