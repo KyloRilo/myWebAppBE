@@ -50,6 +50,6 @@ app.post('/login', async (req, res) =>{
         res.json({Error: "User not found"});
     }
 });
-app.listen(3001, () => {
-    console.log('Server running on http://localhost:3001')
+app.listen(process.env.PORT || 3001, () => {
+    console.log(`Server is listening on ${process.env.PORT}`)
 });
