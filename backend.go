@@ -6,6 +6,8 @@ import (
 	"log"
 	"net/http"
 
+	"./lib"
+
 	"github.com/graphql-go/graphql"
 	"github.com/graphql-go/handler"
 )
@@ -23,7 +25,7 @@ func main() {
 		"allUsers": &graphql.Field{
 			Type: graphql.String,
 			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-				return GetAllUsers(), nil
+				return lib.GetAllUsers(), nil
 			},
 		},
 	}
@@ -36,7 +38,8 @@ func main() {
 	//Query
 	query := `
 		{
-			test
+			test,
+			allUsers
 		}
 	`
 	params := graphql.Params{Schema: schema, RequestString: query}
@@ -53,6 +56,7 @@ func main() {
 		Pretty:   true,
 		GraphiQL: true,
 	})
+	fmt.Println("Initializing Backend . . .")
 
 	http.Handle("/graphql", h)
 	fmt.Printf("Listening on port %s", port)
