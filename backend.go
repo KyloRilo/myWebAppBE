@@ -1,6 +1,6 @@
 package main
 
-import(
+import (
 	"encoding/json"
 	"fmt"
 	"log"
@@ -11,12 +11,19 @@ import(
 )
 
 func main() {
+	port := ":8080"
 	// Schema
 	fields := graphql.Fields{
 		"test": &graphql.Field{
 			Type: graphql.String,
-			Resolve: func(p graphql.ResolveParams) (interface{}, error){
+			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
 				return "hello world", nil
+			},
+		},
+		"allUsers": &graphql.Field{
+			Type: graphql.String,
+			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+				return GetAllUsers(), nil
 			},
 		},
 	}
@@ -42,11 +49,12 @@ func main() {
 
 	//Handler
 	h := handler.New(&handler.Config{
-		Schema: &schema,
-		Pretty: true,
+		Schema:   &schema,
+		Pretty:   true,
 		GraphiQL: true,
 	})
 
 	http.Handle("/graphql", h)
-	http.ListenAndServe(":8080", nil)
+	fmt.Printf("Listening on port %s", port)
+	http.ListenAndServe(port, nil)
 }
