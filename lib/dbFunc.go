@@ -4,46 +4,49 @@ import (
 	"encoding/json"
 	"log"
 
-	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/mssql"
+	firebase "firebase.google.com/go"
+	"google.golang.org/api/option"
+	"cloud.google.com/go/storage"
 )
+projectID := ""
 
-type userObj struct {
-	gorm.Model
-	LoginName    string
-	PasswordHash string
-	FirstName    string
-	LastName     string
-	email        string
-}
-type dbInfo struct {
-	Database string
-	Host     string
-	Port     string
-	User     string
-	Pass     string
-}
+func dbConnect interface{} {
+	ctx := context.Background()
 
-func GetAllUsers() interface{} {
-	/*
-		dbConnect := dbInfo{
-			os.Getenv("DB"),
-			os.Getenv("DB_HOST"),
-			os.Getenv("DB_PORT"),
-			os.Getenv("DB_USER"),
-			os.Getenv("DB_PASS"),
-		}*/
-	var users userObj
-	db, err := gorm.Open("mssql", "")
-	defer db.Close()
-
+	creds, err := google.FindDefaultCredentials(ctx, storage.ScopeReadOnly)
 	if err != nil {
-		log.Fatalf("Failed to connnect to database: %s", err)
+		log.Fatalf(err)
 	}
-	r := db.First(&users)
-	rJSON, _ := json.Marshal(r)
-	n := len(rJSON)
-	obj := string(rJSON[:n])
-	defer db.Close()
-	return obj
+	client, err := storage.NewClient(ctx, option.WithCredentials(creds))
+	if err != nil {
+		log.Fatalf(err)
+	}
+	fmt.Println("Buckets: ")
+	it := client.Buckets(ctx, projectID)
+	for {
+		battrs, err := it.Next()
+		if err == iterator.Done{
+			break
+		}
+		if err != nil {
+			log.Fatalf(err)
+		}
+		fmt.Println(battrs.Name)
+	}
+	return client
+}
+func GetAllUsers() interface{} {
+	client := dbConnect()
+
+	iter := client.Collection("users").Documents(ctx)
+	for {
+		dox, err := iter.Next()
+		if err == iterator.Done {
+			break
+		}
+		if err != nil {
+			log.Fatalf("Failed to iterate: %v", err)
+		}
+		fmt.Println(doc.Data())
+	}
 }
